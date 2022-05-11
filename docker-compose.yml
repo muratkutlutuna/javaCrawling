@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  demo:
+    build:
+      context: .
+    image: demo:1.0.0
+    container_name: java-demo

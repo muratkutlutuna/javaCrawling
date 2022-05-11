@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+    id 'application'
+    id "com.palantir.docker-run" version "0.33.0"
+    id "com.palantir.docker" version "0.33.0"
+}
+
+mainClassName = 'com.TheMovieDB'
+
+group 'org.example'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    archivesBaseName = 'java-crawling'
+    manifest.attributes 'Main-Class': 'com.TheMovieDB'
+}
+
+docker{
+    name "${archivesBaseName}"
+    files "$buildDir/libs/${archivesBaseName}.jar"
+    buildArgs ([JAR_FILE:"${archivesBaseName}.jar"])
+}
+
+dockerRun{
+    name "${archivesBaseName}"
+    image "${archivesBaseName}"
+    ports '9090:9090'
+    clean true
+}
+
+dependencies {
+    implementation group: 'org.jsoup', name: 'jsoup', version: '1.14.3'
+    implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.36.0.3'
+}
+
